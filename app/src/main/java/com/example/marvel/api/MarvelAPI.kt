@@ -1,4 +1,4 @@
-package com.example.marvel.Api
+package com.example.marvel.api
 
 import com.example.marvel.Response
 import retrofit2.http.GET

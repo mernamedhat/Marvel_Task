@@ -4,16 +4,14 @@ package com.example.marvel
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.marvel.Ui.Home.MainAdapter
-import com.example.marvel.Ui.Home.MainViewModel
-import com.example.marvel.Ui.Home.ProgressBarAdapter
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.marvel.ui.SearchAdapter
+import com.example.marvel.ui.home.MainAdapter
+import com.example.marvel.ui.home.MainViewModel
+import com.example.marvel.ui.home.ProgressBarAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -64,7 +62,29 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        search_img.setOnClickListener {
+            searchView.visibility = View.VISIBLE
+            searchText.doAfterTextChanged { text ->
+                if (text.toString().isNotEmpty()) {
+                    searchResults.visibility = View.VISIBLE
+                    viewModel.getCharacters(
+                        timeStamp,
+                        PUBLIC_KEY,
+                        getHash(timeStamp + PRIVATE_KEY + PUBLIC_KEY),
+                        limit = 5,
+                        name= searchText.text.toString()
+                    ).observe(this) { searchResults.adapter = SearchAdapter(it.data.results) }
+                } else {
+                    searchResults.visibility = View.GONE
+                }
+            }
+        }
 
+        backIV.setOnClickListener {
+            searchView.visibility = View.GONE
+            searchResults.visibility = View.GONE
+            searchText.setText("")
+        }
     }
 
     fun getHash(input: String): String {

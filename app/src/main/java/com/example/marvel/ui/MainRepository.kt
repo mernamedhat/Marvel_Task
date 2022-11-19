@@ -1,6 +1,6 @@
-package com.example.marvel.Ui.Home
+package com.example.marvel.ui.home
 
-import com.example.marvel.Api.ServiceBuilder
+import com.example.marvel.api.ServiceBuilder
 
 
 class MainRepository {
